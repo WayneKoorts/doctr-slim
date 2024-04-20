@@ -1,4 +1,5 @@
 import json
+import os
 import shutil
 import tempfile
 from io import BytesIO
@@ -15,6 +16,7 @@ from doctr.datasets.generator.base import synthesize_text_img
 from doctr.io import reader
 from doctr.utils import geometry
 
+from definitions import ROOT_DIR
 
 @pytest.fixture(scope="session")
 def mock_vocab():
@@ -80,9 +82,7 @@ def mock_text_box(mock_text_box_stream, tmpdir_factory):
 
 @pytest.fixture(scope="session")
 def mock_image_stream():
-    url = "https://miro.medium.com/max/3349/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
-    return requests.get(url).content
-
+    return open(os.path.join(ROOT_DIR, "tests", "testimage1.png"), "rb").read()
 
 @pytest.fixture(scope="session")
 def mock_image_path(mock_image_stream, tmpdir_factory):
