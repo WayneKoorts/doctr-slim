@@ -30,7 +30,7 @@ class _DummyCallback:
         [True, True],
     ],
 )
-def test_ocrpredictor(mock_pdf, mock_vocab, assume_straight_pages, straighten_pages):
+def test_ocrpredictor(mock_image_stream, mock_vocab, assume_straight_pages, straighten_pages):
     det_bsize = 4
     det_predictor = DetectionPredictor(
         PreProcessor(output_size=(512, 512), batch_size=det_bsize),
@@ -48,7 +48,8 @@ def test_ocrpredictor(mock_pdf, mock_vocab, assume_straight_pages, straighten_pa
         recognition.crnn_vgg16_bn(pretrained=False, pretrained_backbone=False, vocab=mock_vocab),
     )
 
-    doc = DocumentFile.from_pdf(mock_pdf)
+    # Create a doc with two pages.
+    doc = DocumentFile.from_images([mock_image_stream, mock_image_stream])
 
     predictor = OCRPredictor(
         det_predictor,
@@ -142,7 +143,7 @@ def test_trained_ocr_predictor(mock_payslip):
         [True, True],
     ],
 )
-def test_kiepredictor(mock_pdf, mock_vocab, assume_straight_pages, straighten_pages):
+def test_kiepredictor(mock_image_stream, mock_vocab, assume_straight_pages, straighten_pages):
     det_bsize = 4
     det_predictor = DetectionPredictor(
         PreProcessor(output_size=(512, 512), batch_size=det_bsize),
@@ -160,7 +161,8 @@ def test_kiepredictor(mock_pdf, mock_vocab, assume_straight_pages, straighten_pa
         recognition.crnn_vgg16_bn(pretrained=False, pretrained_backbone=False, vocab=mock_vocab),
     )
 
-    doc = DocumentFile.from_pdf(mock_pdf)
+    # Create a doc with two pages.
+    doc = DocumentFile.from_images([mock_image_stream, mock_image_stream])
 
     predictor = KIEPredictor(
         det_predictor,
@@ -183,6 +185,7 @@ def test_kiepredictor(mock_pdf, mock_vocab, assume_straight_pages, straighten_pa
     with pytest.raises(ValueError):
         input_page = (255 * np.random.rand(1, 256, 512, 3)).astype(np.uint8)
         _ = predictor([input_page])
+
 
     orientation = 0
     assert out.pages[0].orientation["value"] == orientation

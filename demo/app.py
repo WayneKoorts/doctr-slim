@@ -50,12 +50,9 @@ def main(det_archs, reco_archs):
     # File selection
     st.sidebar.title("Document selection")
     # Choose your own image
-    uploaded_file = st.sidebar.file_uploader("Upload files", type=["pdf", "png", "jpeg", "jpg"])
+    uploaded_file = st.sidebar.file_uploader("Upload files", type=["png", "jpeg", "jpg"])
     if uploaded_file is not None:
-        if uploaded_file.name.endswith(".pdf"):
-            doc = DocumentFile.from_pdf(uploaded_file.read())
-        else:
-            doc = DocumentFile.from_images(uploaded_file.read())
+        doc = DocumentFile.from_images(uploaded_file.read())
         page_idx = st.sidebar.selectbox("Page selection", [idx + 1 for idx in range(len(doc))]) - 1
         page = doc[page_idx]
         cols[0].image(page)

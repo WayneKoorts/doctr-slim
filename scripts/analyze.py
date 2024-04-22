@@ -24,10 +24,7 @@ if is_tf_available():
 def main(args):
     model = ocr_predictor(args.detection, args.recognition, pretrained=True)
 
-    if args.path.lower().endswith(".pdf"):
-        doc = DocumentFile.from_pdf(args.path)
-    else:
-        doc = DocumentFile.from_images(args.path)
+    doc = DocumentFile.from_images(args.path)
 
     out = model(doc)
 
@@ -42,7 +39,7 @@ def parse_args():
         description="DocTR end-to-end analysis", formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
 
-    parser.add_argument("path", type=str, help="Path to the input document (PDF or image)")
+    parser.add_argument("path", type=str, help="Path to the input image")
     parser.add_argument("--detection", type=str, default="db_resnet50", help="Text detection model to use for analysis")
     parser.add_argument(
         "--recognition", type=str, default="crnn_vgg16_bn", help="Text recognition model to use for analysis"

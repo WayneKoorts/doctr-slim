@@ -25,8 +25,6 @@ if is_tf_available():
         tf.config.experimental.set_memory_growth(gpu_devices[0], True)
 
 IMAGE_FILE_EXTENSIONS = [".jpeg", ".jpg", ".png", ".tif", ".tiff", ".bmp"]
-OTHER_EXTENSIONS = [".pdf"]
-
 
 def _process_file(model, file_path: Path, out_format: str) -> None:
     if out_format not in ["txt", "json", "xml"]:
@@ -34,8 +32,6 @@ def _process_file(model, file_path: Path, out_format: str) -> None:
 
     if os.path.splitext(file_path)[1] in IMAGE_FILE_EXTENSIONS:
         doc = DocumentFile.from_images([file_path])
-    elif os.path.splitext(file_path)[1] in OTHER_EXTENSIONS:
-        doc = DocumentFile.from_pdf(file_path)
     else:
         print(f"Skip unsupported file type: {file_path}")
 
@@ -71,7 +67,7 @@ def main(args):
 
     if path.is_dir():
         to_process = [
-            f for f in path.iterdir() if str(f).lower().endswith(tuple(IMAGE_FILE_EXTENSIONS + OTHER_EXTENSIONS))
+            f for f in path.iterdir() if str(f).lower().endswith(tuple(IMAGE_FILE_EXTENSIONS))
         ]
         for file_path in tqdm(to_process):
             _process_file(model, file_path, args.format)
@@ -84,7 +80,7 @@ def parse_args():
         description="DocTR text detection",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("path", type=str, help="Path to process: PDF, image, directory")
+    parser.add_argument("path", type=str, help="Path to process: image, directory")
     parser.add_argument("--detection", type=str, default="db_resnet50", help="Text detection model to use for analysis")
     parser.add_argument("--bin-thresh", type=float, default=0.3, help="Binarization threshold for the detection model.")
     parser.add_argument("--box-thresh", type=float, default=0.1, help="Threshold for the detection boxes.")

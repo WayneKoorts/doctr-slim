@@ -165,8 +165,8 @@ def test_estimate_page_angle():
     assert angle == 0.0
 
 
-def test_extract_crops(mock_pdf):
-    doc_img = DocumentFile.from_pdf(mock_pdf)[0]
+def test_extract_crops(mock_image_stream):
+    doc_img = DocumentFile.from_images(mock_image_stream)[0]
     num_crops = 2
     rel_boxes = np.array(
         [[idx / num_crops, idx / num_crops, (idx + 1) / num_crops, (idx + 1) / num_crops] for idx in range(num_crops)],
@@ -213,8 +213,8 @@ def test_extract_crops(mock_pdf):
     assert geometry.extract_crops(doc_img, np.zeros((0, 4))) == []
 
 
-def test_extract_rcrops(mock_pdf):
-    doc_img = DocumentFile.from_pdf(mock_pdf)[0]
+def test_extract_rcrops(mock_image_stream):
+    doc_img = DocumentFile.from_images(mock_image_stream)[0]
     num_crops = 2
     rel_boxes = np.array(
         [

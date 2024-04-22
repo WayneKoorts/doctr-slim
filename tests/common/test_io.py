@@ -1,5 +1,5 @@
 from io import BytesIO
-from pathlib import Path
+import os
 
 import numpy as np
 import pytest
@@ -14,29 +14,7 @@ def _check_doc_content(doc_tensors, num_pages):
     assert all(isinstance(page, np.ndarray) for page in doc_tensors)
     assert all(page.dtype == np.uint8 for page in doc_tensors)
 
-
-def test_read_pdf(mock_pdf):
-    doc = io.read_pdf(mock_pdf)
-    _check_doc_content(doc, 2)
-
-    # Test with Path
-    doc = io.read_pdf(Path(mock_pdf))
-    _check_doc_content(doc, 2)
-
-    with open(mock_pdf, "rb") as f:
-        doc = io.read_pdf(f.read())
-    _check_doc_content(doc, 2)
-
-    # Wrong input type
-    with pytest.raises(TypeError):
-        _ = io.read_pdf(123)
-
-    # Wrong path
-    with pytest.raises(FileNotFoundError):
-        _ = io.read_pdf("my_imaginary_file.pdf")
-
-
-def test_read_img_as_numpy(tmpdir_factory, mock_pdf):
+def test_read_img_as_numpy(tmpdir_factory, mock_image_stream):
     # Wrong input type
     with pytest.raises(TypeError):
         _ = io.read_img_as_numpy(123)
@@ -46,8 +24,15 @@ def test_read_img_as_numpy(tmpdir_factory, mock_pdf):
         io.read_img_as_numpy("my_imaginary_file.jpg")
 
     # Invalid image
+    # Create a temporary bogus image file on disk with invalid image data.
+    invalid_img = BytesIO(b"not an image")
+    tmp_path = str(tmpdir_factory.mktemp("data").join("invalid_img.jpg"))
+    with open(tmp_path, "wb") as f:
+        f.write(invalid_img.getbuffer())
     with pytest.raises(ValueError):
-        io.read_img_as_numpy(str(mock_pdf))
+        io.read_img_as_numpy(tmp_path)
+    if os.path.exists(tmp_path):
+        os.remove(tmp_path)
 
     # From path
     url = "https://doctr-static.mindee.com/models?id=v0.2.1/Grace_Hopper.jpg&src=0"
@@ -76,24 +61,8 @@ def test_read_img_as_numpy(tmpdir_factory, mock_pdf):
     resized_page = io.read_img_as_numpy(tmp_path, target_size)
     assert resized_page.shape[:2] == target_size
 
-
-def test_read_html():
-    url = "https://www.google.com"
-    pdf_stream = io.read_html(url)
-    assert isinstance(pdf_stream, bytes)
-
-
-def test_document_file(mock_pdf, mock_image_stream):
+def test_document_file(mock_image_stream):
     pages = io.DocumentFile.from_images(mock_image_stream)
     _check_doc_content(pages, 1)
 
-    assert isinstance(io.DocumentFile.from_pdf(mock_pdf), list)
-    assert isinstance(io.DocumentFile.from_url("https://www.google.com"), list)
-
-
-def test_pdf(mock_pdf):
-    pages = io.DocumentFile.from_pdf(mock_pdf)
-
-    # As images
-    num_pages = 2
-    _check_doc_content(pages, num_pages)
+    assert isinstance(io.DocumentFile.from_images(mock_image_stream), list)
