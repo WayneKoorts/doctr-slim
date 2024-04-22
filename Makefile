@@ -9,6 +9,9 @@ style:
 	ruff check --fix .
 	ruff format .
 
+package:
+	python -m build
+
 # Run tests for the library
 test:
 	coverage run -m pytest tests/common/
