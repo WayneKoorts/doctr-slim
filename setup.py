@@ -8,7 +8,7 @@ from pathlib import Path
 
 from setuptools import setup
 
-PKG_NAME = "python-doctr"
+PKG_NAME = "doctr-slim"
 VERSION = os.getenv("BUILD_VERSION", "0.9.0a0")
 
 

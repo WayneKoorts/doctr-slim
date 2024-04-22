@@ -3,14 +3,13 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "python-doctr"
-description = "Document Text Recognition (docTR): deep Learning for high-performance OCR on documents."
-authors = [{name = "Mindee", email = "contact@mindee.com"}]
+name = "doctr-slim"
+description = "A leaner version of the doctr OCR tools."
+authors = [
+    {name = "Wayne Koorts", email = "wayne@wkoorts.com"}
+]
 maintainers = [
-    {name = "François-Guillaume Fernandez"},
-    {name = "Charles Gaillard"},
-    {name = "Olivier Dulcy"},
-    {name = "Felix Dittrich"},
+    {name = "Wayne Koorts", email = "wayne@wkoorts.com"},
 ]
 readme = "README.md"
 requires-python = ">=3.8.0,<4"  # TODO: bump to >=3.9 before release
@@ -121,9 +120,8 @@ dev = [
 
 [project.urls]
 documentation = "https://mindee.github.io/doctr"
-repository = "https://github.com/mindee/doctr"
-tracker = "https://github.com/mindee/doctr/issues"
-changelog = "https://mindee.github.io/doctr/changelog.html"
+repository = "https://github.com/WayneKoorts/doctr-slim"
+tracker = "https://github.com/WayneKoorts/doctr-slim/issues"
 
 [tool.setuptools]
 zip-safe = true
