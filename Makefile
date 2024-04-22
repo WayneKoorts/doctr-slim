@@ -18,11 +18,20 @@ test:
 test-common:
 	coverage run -m pytest tests/common/
 
+test-common-rerun:
+	coverage run -m pytest tests/common/ --lf
+
 test-tf:
 	USE_TF='1' coverage run -m pytest tests/tensorflow/
 
+test-tf-rerun:
+	USE_TF='1' coverage run -m pytest tests/tensorflow/ --lf
+
 test-torch:
 	USE_TORCH='1' coverage run -m pytest tests/pytorch/
+
+test-torch-rerun:
+	USE_TORCH='1' coverage run -m pytest tests/pytorch/ --lf
 
 # Check that docs can build
 docs-single-version:
