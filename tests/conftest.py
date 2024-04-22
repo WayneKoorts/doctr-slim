@@ -25,26 +25,6 @@ def mock_vocab():
         "(LNÙFut[)èZs+&°Sd=Ï!<â_Ç>rêi`l"
     )
 
-
-@pytest.fixture(scope="session")
-def mock_pdf(tmpdir_factory):
-    # Page 1
-    text_img = synthesize_text_img("I am a jedi!", background_color=(255, 255, 255), text_color=(0, 0, 0))
-    page = Image.new(text_img.mode, (1240, 1754), (255, 255, 255))
-    page.paste(text_img, (50, 100))
-
-    # Page 2
-    text_img = synthesize_text_img("No, I am your father.", background_color=(255, 255, 255), text_color=(0, 0, 0))
-    _page = Image.new(text_img.mode, (1240, 1754), (255, 255, 255))
-    _page.paste(text_img, (40, 300))
-
-    # Save the PDF
-    fn = tmpdir_factory.mktemp("data").join("mock_pdf_file.pdf")
-    page.save(str(fn), "PDF", save_all=True, append_images=[_page])
-
-    return str(fn)
-
-
 @pytest.fixture(scope="session")
 def mock_payslip(tmpdir_factory):
     url = "https://3.bp.blogspot.com/-Es0oHTCrVEk/UnYA-iW9rYI/AAAAAAAAAFI/hWExrXFbo9U/s1600/003.jpg"

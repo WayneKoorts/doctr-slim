@@ -30,7 +30,7 @@ class _DummyCallback:
         [True, True],
     ],
 )
-def test_ocrpredictor(mock_pdf, mock_vocab, assume_straight_pages, straighten_pages):
+def test_ocrpredictor(mock_image_stream, mock_vocab, assume_straight_pages, straighten_pages):
     det_bsize = 4
     det_predictor = DetectionPredictor(
         PreProcessor(output_size=(512, 512), batch_size=det_bsize),
@@ -51,7 +51,8 @@ def test_ocrpredictor(mock_pdf, mock_vocab, assume_straight_pages, straighten_pa
 
     assert not reco_predictor.model.training
 
-    doc = DocumentFile.from_pdf(mock_pdf)
+    # Create a document with two pages.
+    doc = DocumentFile.from_images([mock_image_stream, mock_image_stream])
 
     predictor = OCRPredictor(
         det_predictor,
@@ -143,7 +144,7 @@ def test_trained_ocr_predictor(mock_payslip):
         [True, True],
     ],
 )
-def test_kiepredictor(mock_pdf, mock_vocab, assume_straight_pages, straighten_pages):
+def test_kiepredictor(mock_image_stream, mock_vocab, assume_straight_pages, straighten_pages):
     det_bsize = 4
     det_predictor = DetectionPredictor(
         PreProcessor(output_size=(512, 512), batch_size=det_bsize),
@@ -164,8 +165,9 @@ def test_kiepredictor(mock_pdf, mock_vocab, assume_straight_pages, straighten_pa
 
     assert not reco_predictor.model.training
 
-    doc = DocumentFile.from_pdf(mock_pdf)
-
+    # Create a document with two pages.
+    doc = DocumentFile.from_images([mock_image_stream, mock_image_stream])
+    
     predictor = KIEPredictor(
         det_predictor,
         reco_predictor,

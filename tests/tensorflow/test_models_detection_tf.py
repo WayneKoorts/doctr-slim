@@ -99,16 +99,14 @@ def test_detection_models(arch_name, input_shape, output_size, out_prob, train_m
 
 
 @pytest.fixture(scope="session")
-def test_detectionpredictor(mock_pdf):
+def test_detectionpredictor(mock_image_stream):
     batch_size = 4
     predictor = DetectionPredictor(
         PreProcessor(output_size=(512, 512), batch_size=batch_size), detection.db_resnet50(input_shape=(512, 512, 3))
     )
 
-    pages = DocumentFile.from_pdf(mock_pdf).as_images()
+    pages = DocumentFile.from_images(mock_image_stream).as_images()
     out = predictor(pages)
-    # The input PDF has 2 pages
-    assert len(out) == 2
 
     # Dimension check
     with pytest.raises(ValueError):
@@ -119,18 +117,15 @@ def test_detectionpredictor(mock_pdf):
 
 
 @pytest.fixture(scope="session")
-def test_rotated_detectionpredictor(mock_pdf):
+def test_rotated_detectionpredictor(mock_image_stream):
     batch_size = 4
     predictor = DetectionPredictor(
         PreProcessor(output_size=(512, 512), batch_size=batch_size),
         detection.db_resnet50(assume_straight_pages=False, input_shape=(512, 512, 3)),
     )
 
-    pages = DocumentFile.from_pdf(mock_pdf).as_images()
+    pages = DocumentFile.from_images(mock_image_stream).as_images()
     out = predictor(pages)
-
-    # The input PDF has 2 pages
-    assert len(out) == 2
 
     # Dimension check
     with pytest.raises(ValueError):

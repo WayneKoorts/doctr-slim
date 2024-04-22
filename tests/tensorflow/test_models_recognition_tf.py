@@ -87,14 +87,14 @@ def test_reco_postprocessors(post_processor, input_shape, mock_vocab):
 
 
 @pytest.fixture(scope="session")
-def test_recognitionpredictor(mock_pdf, mock_vocab):
+def test_recognitionpredictor(mock_image_stream, mock_vocab):
     batch_size = 4
     predictor = RecognitionPredictor(
         PreProcessor(output_size=(32, 128), batch_size=batch_size, preserve_aspect_ratio=True),
         recognition.crnn_vgg16_bn(vocab=mock_vocab, input_shape=(32, 128, 3)),
     )
 
-    pages = DocumentFile.from_pdf(mock_pdf).as_images()
+    pages = DocumentFile.from_images(mock_image_stream).as_images()
     # Create bounding boxes
     boxes = np.array([[0.5, 0.5, 0.75, 0.75], [0.5, 0.5, 1.0, 1.0]], dtype=np.float32)
     crops = extract_crops(pages[0], boxes)

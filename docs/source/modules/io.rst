@@ -64,20 +64,13 @@ File reading
 
 High-performance file reading and conversion to processable structured data.
 
-.. autofunction:: read_pdf
-
 .. autofunction:: read_img_as_numpy
 
 .. autofunction:: read_img_as_tensor
 
 .. autofunction:: decode_img_as_tensor
 
-.. autofunction:: read_html
-
-
 .. autoclass:: DocumentFile
-
-   .. automethod:: from_pdf
 
    .. automethod:: from_url
 
